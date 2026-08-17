@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="index.css" />
+    <title>Darts Assist</title>
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="panel">
+        <div class="panel-header">
+          <h1>Darts doubles ladder</h1>
+        </div>
+
+        <form id="player-form" class="player-form">
+          <label for="player-name">Add a player</label>
+          <div class="input-row">
+            <input
+              id="player-name"
+              name="player-name"
+              type="text"
+              placeholder="Enter a player name"
+            />
+            <button type="submit">Add</button>
+          </div>
+        </form>
+
+        <div class="button-row">
+          <button id="start-round" class="primary" type="button">
+            Create match-ups
+          </button>
+          <button id="reset-players" class="secondary" type="button">
+            Reset
+          </button>
+        </div>
+
+        <div class="players-box">
+          <h2>Players</h2>
+          <ul id="player-list" class="player-list"></ul>
+        </div>
+      </section>
+
+      <section class="panel match-panel">
+        <h2>Next match-up</h2>
+        <div id="match-summary" class="match-summary"></div>
+        <div id="winner-actions" class="winner-actions"></div>
+
+        <div id="bull-off-actions" class="bull-off-actions"></div>
+      </section>
+
+      <section class="panel queue-panel">
+        <h2>Waiting teams</h2>
+        <ol id="queue-list" class="queue-list"></ol>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
