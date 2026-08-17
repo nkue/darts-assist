@@ -7,9 +7,9 @@
     <title>Darts Assist</title>
   </head>
   <body>
-    <main class="app-shell">
-      <section class="panel">
-        <div class="panel-header">
+    <main class="app-layout">
+      <section class="card">
+        <div class="section-header">
           <h1>Darts doubles ladder</h1>
         </div>
 
@@ -26,7 +26,7 @@
           </div>
         </form>
 
-        <div class="button-row">
+        <div class="toolbar">
           <button id="start-round" class="primary" type="button">
             Create match-ups
           </button>
@@ -35,13 +35,13 @@
           </button>
         </div>
 
-        <div class="players-box">
+        <div class="player-panel">
           <h2>Players</h2>
           <ul id="player-list" class="player-list"></ul>
         </div>
       </section>
 
-      <section class="panel match-panel">
+      <section class="card match-card">
         <h2>Next match-up</h2>
         <div id="match-summary" class="match-summary"></div>
         <div id="winner-actions" class="winner-actions"></div>
@@ -49,7 +49,7 @@
         <div id="bull-off-actions" class="bull-off-actions"></div>
       </section>
 
-      <section class="panel queue-panel">
+      <section class="card queue-card">
         <h2>Waiting teams</h2>
         <ol id="queue-list" class="queue-list"></ol>
       </section>

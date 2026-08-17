@@ -28,6 +28,7 @@
 
   function buildQueueFromPlayers() {
     const teams = [];
+
     for (let i = 0; i + 1 < players.length; i += 2) {
       teams.push([players[i], players[i + 1]]);
     }
@@ -45,6 +46,11 @@
 
   function teamLabel(team) {
     return team.join(" & ");
+  }
+
+  function isWaitingForBullOffChoice() {
+    const action = getQueueAction();
+    return action?.kind === "fill-singleton";
   }
 
   function renderPlayers() {
@@ -82,7 +88,6 @@
     const nextTeam = queue[0];
     const followingTeam = queue[1];
 
-    // Only offer a fill-in option when the front team is a singleton and the following entry is a pair.
     if (
       nextTeam &&
       nextTeam.length === 1 &&
@@ -101,25 +106,21 @@
 
   function renderBullOffUI() {
     const action = getQueueAction();
-    if (!action) {
+    if (!action || action.kind !== "fill-singleton") {
       elements.bullOffActions.innerHTML = "";
       return;
     }
 
-    if (action.kind === "fill-singleton") {
-      const [first, second] = action.pair;
-      pauseActions = true;
-      elements.bullOffActions.innerHTML = `
-        <p class="bull-off-instruction">
-          Choose who joins ${action.singleton} from ${first} and ${second}.
-        </p>
-        <div class="bull-off-options">
-          <button type="button" class="join-player" data-player="${first}">${first}</button>
-          <button type="button" class="join-player" data-player="${second}">${second}</button>
-        </div>
-      `;
-      return;
-    }
+    const [first, second] = action.pair;
+    elements.bullOffActions.innerHTML = `
+      <p class="bull-off-instruction">
+        Choose who joins ${action.singleton} from ${first} and ${second}.
+      </p>
+      <div class="bull-off-options">
+        <button type="button" class="join-player" data-player="${first}">${first}</button>
+        <button type="button" class="join-player" data-player="${second}">${second}</button>
+      </div>
+    `;
   }
 
   function resolveQueueJoin(playerName) {
@@ -133,8 +134,26 @@
     const leftover = playerName === first ? second : first;
 
     queue = [[action.singleton, chosen], [leftover], ...queue.slice(2)];
-    pauseActions = false;
     render();
+  }
+
+  function renderWinnerButtons(teamOne, teamTwo) {
+    elements.winnerActions.replaceChildren();
+
+    const createWinnerButton = (team) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "winner-button";
+      button.disabled = isWaitingForBullOffChoice();
+      button.dataset.team = teamKey(team);
+      button.textContent = `${teamLabel(team)} win`;
+      return button;
+    };
+
+    elements.winnerActions.append(
+      createWinnerButton(teamOne),
+      createWinnerButton(teamTwo),
+    );
   }
 
   function renderMatch() {
@@ -160,23 +179,7 @@
       </div>
     `;
 
-    elements.winnerActions.replaceChildren();
-
-    const createWinnerButton = (team) => {
-      const button = document.createElement("button");
-      button.type = "button";
-      button.className = "winner-button";
-      button.disabled = getQueueAction()?.kind === "fill-singleton";
-      button.dataset.team = teamKey(team);
-      button.textContent = `${teamLabel(team)} win`;
-      return button;
-    };
-
-    elements.winnerActions.append(
-      createWinnerButton(teamOne),
-      createWinnerButton(teamTwo),
-    );
-
+    renderWinnerButtons(teamOne, teamTwo);
     renderQueueList();
     renderBullOffUI();
   }
